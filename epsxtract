@@ -1,0 +1,19 @@
+#!/usr/bin/awk -f 
+#
+# extract any embedded EPS figures from a Postscript file. This script
+# is pretty basic, and hence quite fragile.
+#
+# Syntax: epsxtract <psfile>
+#
+# Output: <psfile>_1.eps, <psfile>_2.eps, etc.
+#
+
+
+BEGIN { cnt = 0; t= 0 }
+
+/%%BeginDocument/ { fname= FILENAME"_"cnt".eps"; text= ""; t++ }
+
+{ if(t>0) print $0 >fname }
+
+/%%EndDocument/ { cnt++; t-- }
+
