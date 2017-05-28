@@ -1,0 +1,30 @@
+#!/bin/sh -f
+# start tclsh \
+exec tclsh "$0" "$@"
+
+set red		"\[31m"
+set green	"\[32m"
+set normal	"\[0m"
+
+if {[llength $argv]> 0} {
+    set dir [lindex $argv 0]
+} else {
+    set dir .
+}
+set files [glob -nocomplain\
+    $dir/.??*~ $dir/*~ $dir/*.aux $dir/*.bbl $dir/*.blg $dir/*.log $dir/*.ilg\
+    $dir/*.toc $dir/*.lof $dir/*.lot $dir/*.idx $dir/*.ind $dir/*.out]
+
+if {[llength $files]== 0} {
+    puts stderr "Directory is clean!"
+} else {
+    foreach file $files {
+	catch "exec /bin/rm \"$file\""
+	
+	if {[file exists $file]} {
+	    puts stdout "${red}Could not remove $file$normal"
+	} else {
+            puts stdout "${green}Removed $file$normal"
+	}
+    }
+}

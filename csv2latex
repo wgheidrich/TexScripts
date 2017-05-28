@@ -1,0 +1,48 @@
+#!/bin/sh
+# start tclsh \
+exec tclsh "$0" "$@"
+
+#
+# convert a CSV spreadsheet into a LaTeX table
+#
+
+set separatorChar {,}
+set quoteChar {\"}
+set outFile stdout
+
+set inFile [open [lindex $argv 0]]
+set tmp [split [read $inFile] "\n"]
+regsub -all $quoteChar $tmp "" table
+set numColumns [llength [split [lindex $table 0] $separatorChar]]
+
+set emptyRow {}
+for {set i 1} {$i< $numColumns} {incr i} {
+    append emptyRow $separatorChar
+}
+
+puts $outFile "\\begin\{tabular\}\{|l|" nonewline
+for {set i 1} {$i < $numColumns} {incr i} {
+    puts $outFile "r|" nonewline
+}
+puts $outFile "\}"
+puts $outFile "  \\hline"
+
+foreach row $table {
+    if {$row == $emptyRow} {
+	puts $outFile "  \\hline"
+    } else {
+	set entries [split $row $separatorChar]
+	if {[llength $entries] == 0 } {
+	    continue
+	}
+	puts $outFile "  [lindex $entries 0]" nonewline
+	for {set i 1} {$i< $numColumns} {incr i} {
+	    puts $outFile " & [lindex $entries $i]" nonewline
+	}
+	puts $outFile " \\\\"
+    }
+}
+
+puts $outFile "  \\hline"
+puts $outFile "\\end\{tabular\}"
+

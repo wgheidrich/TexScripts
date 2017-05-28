@@ -1,0 +1,6 @@
+#!/bin/sh -f
+
+# create PDf with losslessly compressed images (who can remmeber all
+# these options!)
+
+ps2pdf -dCompatibilityLevel=1.3 -dAutoFilterColorImages=true -sColorImageFilter=FlateEncode -dAutoFilterGrayImages=true -sGrayImageFilter=FlateEncode -dEmbedAllFonts=true $*

@@ -1,0 +1,8 @@
+#!/bin/tcsh -f
+
+# run bibtex on all bibliography sections (for LaTeX with multiple
+# bibtex sections using the bibunits package)
+
+foreach f (*.*.aux)
+  bibtex $f:r
+end
