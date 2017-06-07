@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+
+
+if [ $# -ne 2 ]; then
+    echo "Usage: $0 <main tex file> <zip file>"
+    exit 1
+fi
+
+# script for finding figure names
+read -r -d '' getfigures <<EOF
+{
+    if( match( \$0,/\\\\includegraphics[^\{]*\{([^\}]*)\}/,figures ) ) {
+        print figures[1]
+    }
+}
+EOF
+
+figures=`gawk "$getfigures" $1`
+
+# for the actual figure files, test all plausible file extensions
+figfiles=""
+for fig in $figures; do
+    for ext in "" ".pdf" ".png" ".eps"; do
+	if [ -f $fig$ext ]; then
+	    figfiles="$figfiles $fig$ext"
+	fi
+    done
+done
+
+zip $2 $1 *.{sty,cls} $figfiles
+
