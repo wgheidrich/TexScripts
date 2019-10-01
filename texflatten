@@ -20,7 +20,6 @@ function insertFile(filename) {
     print "%%% BEGIN "filename
     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     while ((getline line < filename) > 0)
-        # strip full line comments while we are at it
         if( !match( line,/^%/ ) )
             print line
     close(filename)
