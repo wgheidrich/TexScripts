@@ -47,7 +47,7 @@ cd `dirname $1`
 # bibliography statements left (except those commented out)
 infile=`mktemp flatten_input.XXXXXXX`
 outfile=`mktemp flatten_output.XXXXXXX`
-cp $1 $outfile
+cp `basename $1` $outfile
 while [ "$(egrep '^[^%]*\\(include|input|bibliography){' $outfile)" != "" ]; do
     (>&2 echo "flattening iteration...")
     cp $outfile $infile
