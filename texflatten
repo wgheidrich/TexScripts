@@ -41,6 +41,8 @@ function insertFile(filename) {
 }
 EOF
 
+cd `dirname $1`
+
 # iterative flattening until there are no more include, input and
 # bibliography statements left (except those commented out)
 infile=`mktemp flatten_input.XXXXXXX`
